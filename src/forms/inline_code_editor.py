@@ -73,8 +73,8 @@ class InlineCodeEditor(QWidget):
                 lay.addWidget(label_func)
 
                 label_desc = QLabel()
-                desc = re.sub(r"{{(\w+)\}\}", "<i><b>\g<1></b></i>", html.escape(f[2]))
-                desc = re.sub(r"//(\w+)//", "<i>\g<1></i>", desc)
+                desc = re.sub(r"{{(\w+)\}\}", r"<i><b>\g<1></b></i>", html.escape(f[2]))
+                desc = re.sub(r"//(\w+)//", r"<i>\g<1></i>", desc)
 
                 label_desc.setText(desc)
 

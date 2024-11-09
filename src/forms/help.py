@@ -44,8 +44,8 @@ class HelpWindow(QDialog):
             category, function = maths.lib.find_function(current.statusTip(0))
 
             name, args, desc = function[:3]
-            desc = re.sub(r"{{(\w+)\}\}", "<i><b>\g<1></b></i>", escape(desc))
-            desc = re.sub(r"//(\w+)//", "<i>\g<1></i>", desc)
+            desc = re.sub(r"{{(\w+)\}\}", r"<i><b>\g<1></b></i>", escape(desc))
+            desc = re.sub(r"//(\w+)//", r"<i>\g<1></i>", desc)
 
             html = util.html.centered("<h1>%s</h1>" % maths.lib.docs.get_func_def_html(function))
 

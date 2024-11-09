@@ -538,7 +538,7 @@ class Parser:
             prev1 = (typ, val)
 
         # remove double whitespaces
-        return re.sub("\s\s+", " ", result)
+        return re.sub(r"\s\s+", " ", result)
 
 
 def quick_parse(expr: str) -> nodes.AstNode:

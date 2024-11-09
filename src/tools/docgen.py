@@ -50,8 +50,8 @@ def doc_funcs():
             args += "</ul>"
 
             # replace {{x}} by `x` for markdown
-            desc = re.sub(r"{{(\w+)\}\}", "`\g<1>`", function[2])
-            desc = re.sub(r"//(\w+)//", "*\g<1>*", desc)
+            desc = re.sub(r"{{(\w+)\}\}", r"`\g<1>`", function[2])
+            desc = re.sub(r"//(\w+)//", r"*\g<1>*", desc)
 
             result += "|%s|%s|%s|\n" % (name, args, desc)
 
@@ -91,7 +91,7 @@ def doc_consts():
                 # add unit
                 unit = " (%s)" % constant[3].replace("*", "&middot;")
 
-            desc = re.sub(r"//(\w+)//", "*\g<1>*", desc)
+            desc = re.sub(r"//(\w+)//", r"*\g<1>*", desc)
 
             result += "|`%s`|%s|*%s* - %s%s|\n" % (name, value, symbol, desc, unit)
 

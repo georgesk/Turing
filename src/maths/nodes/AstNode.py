@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from shlex import shlex  # lexer module for shell-mode expressions
 from typing import List
-
+from shlex import shlex # lexer module for shell-mode expressions
 
 class AstNode:
     """Base node class"""
@@ -26,7 +25,6 @@ class AstNode:
     def flatten(self) -> List["AstNode"]:
         return [self] + self.children()
 
-
 def isSimple(s):
     """
     @ param s a string which may be a left or a right operand
@@ -34,11 +32,10 @@ def isSimple(s):
     when it is enclosed in parentheses or when it contains a single
     toke, according to shlex
     """
-    return len(list(shlex(s))) == 1 or \
-           (s[0] == '(' and s[-1] == ')') or \
-           (s[0] == '{' and s[-1] == '}') or \
-           (s[0] == '[' and s[-1] == ']')
-
+    return len(list(shlex(s)))==1 or \
+        (s[0]=='(' and s[-1]==')') or \
+        (s[0]=='{' and s[-1]=='}') or \
+        (s[0]=='[' and s[-1]==']')
 
 def protectExpr(s):
     """
@@ -47,4 +44,5 @@ def protectExpr(s):
     """
     if isSimple(s):
         return s
-    return '(' + s + ')'
+    return '('+s+')'
+

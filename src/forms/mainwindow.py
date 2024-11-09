@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from util.profiler import pf_point, pf_end
-
 import html
 import json
 import os
@@ -33,7 +31,6 @@ from pyqode.core import panels
 from util import first_found_dir
 from util import theming, show_error
 from util.widgets import *
-
 
 translate = QCoreApplication.translate
 
@@ -140,8 +137,6 @@ block_html = lambda: '<span style="color:%s;font-weight:bold">' % theming.algo_c
 comment_html = lambda: '<span style="color:%s;font-style:italic">' % theming.algo_colors[1]
 keyword_html = lambda: '<span style="color:%s;font-weight:bold">' % theming.algo_colors[2]
 red_html = lambda: '<span style="color:%s">' % theming.algo_colors[3]
-
-label_format = "&nbsp;<span>%s</span>" + "&nbsp;" * 10
 
 
 def sleep(duration):
@@ -264,8 +259,7 @@ def article_fetch(language):
     import urllib.request
     from xml.etree import ElementTree
 
-    response = urllib.request.urlopen(
-        urllib.request.Request("https://turingapp.ml/%s/feed/" % language, headers={'User-Agent': 'Mozilla/5.0'}))
+    response = urllib.request.urlopen(urllib.request.Request("https://turingapp.ml/%s/feed/" % language, headers={'User-Agent': 'Mozilla/5.0'}))
     xml = ElementTree.fromstring(response.read())
     result = []
 
@@ -408,7 +402,8 @@ def refresh_buttons_status():
         "Replace",
         "Run",
         "Step",
-        "ConvertToPython"
+        "ConvertToPython",
+        "ConvertToPseudocode"
     ]:
         get_action(c).setEnabled(active_code)
 
@@ -1106,7 +1101,7 @@ def handler_Open(whichDir=""):
     """
     sel_file, _ = QFileDialog.getOpenFileName(
         GuiState.window, translate("MainWindow", "Open"),
-        whichDir or "",
+        whichDir,
         ";;".join(GuiState.filters.values()))
 
     if not sel_file:
@@ -1495,7 +1490,7 @@ def get_item_label(item):
     txt.dclicked.connect(algo_double_click)
     item.lbl = txt
     GuiState.ui.treeWidget.setItemWidget(item, 0, txt)
-
+    GuiState.ui.treeWidget.header().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     return txt
 
@@ -1506,8 +1501,7 @@ def get_item_html(html, data=""):
     item.setFont(0, GuiState.ui.treeWidget.font())
     lbl = get_item_label(item)
     lbl.setFont(item.font(0))
-    lbl.setText(label_format % html)
-    item.setSizeHint(0, lbl.sizeHint())
+    lbl.setText('&nbsp;<span>%s</span>' % html)
 
     GuiState.ui.treeWidget.setItemWidget(item, 0, lbl)
 
@@ -1517,7 +1511,7 @@ def get_item_html(html, data=""):
 def refresh_algo_text():
     for item, stmt in GuiState.item_map.values():
         lbl = get_item_label(item)
-        lbl.setText(label_format % str_stmt(stmt))
+        lbl.setText('&nbsp;<span>%s</span>' % str_stmt(stmt))
 
 
 def add_display():
@@ -2327,8 +2321,6 @@ def init_ui():
 
     load_languages()
 
-    GuiState.ui.treeWidget.header().setSectionResizeMode(QHeaderView.ResizeToContents)
-
     GuiState.algo_base_font = GuiState.ui.treeWidget.font()
 
     recent_init_actions()
@@ -2493,7 +2485,6 @@ def autosave_clear():
 def clean_exit():
     autosave_clear()
     GuiState.code_editor.backend.stop()
-    pf_end()
     sys.exit()
 
 
@@ -2506,9 +2497,7 @@ def version_check():
     import urllib.request
     import re
 
-    result = json.load(urllib.request.urlopen(
-        urllib.request.Request("https://api.github.com/repos/TuringApp/Turing/releases/latest",
-                               headers={'User-Agent': 'Mozilla/5.0'})))
+    result = json.load(urllib.request.urlopen(urllib.request.Request("https://api.github.com/repos/TuringApp/Turing/releases/latest", headers={'User-Agent': 'Mozilla/5.0'})))
 
     if result and type(result) == dict and "tag_name" in result:
         version = re.findall(r"[\d.]+", result["tag_name"])[0]
